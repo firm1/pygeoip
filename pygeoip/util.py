@@ -36,7 +36,11 @@ def ip2long(ip):
     try:
         return int(binascii.hexlify(socket.inet_aton(ip)), 16)
     except socket.error:
-        return int(binascii.hexlify(socket.inet_pton(socket.AF_INET6, ip)), 16)
+        try:
+            return int(binascii.hexlify(socket.inet_pton(socket.AF_INET6, ip)), 16)
+        except AttributeError:
+            import win_inet_pton
+            return int(binascii.hexlify(socket.inet_pton(socket.AF_INET6, ip)), 16)
 
 
 def str2fp(data):
